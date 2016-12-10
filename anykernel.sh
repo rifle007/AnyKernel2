@@ -1,3 +1,5 @@
+#!/sbin/sh
+
 # AnyKernel2 Ramdisk Mod Script
 # osm0sis @ xda-developers
 
@@ -16,8 +18,8 @@ device.name5=
 
 # shell variables
 #leave blank for automatic search boot block
-block=
-
+#block=
+#is_slot_device=0;
 
 ## AnyKernel methods (DO NOT CHANGE)
 # import patching functions/variables - see for reference

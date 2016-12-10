@@ -1,3 +1,5 @@
+#!/sbin/sh
+
 ## AnyKernel methods (DO NOT CHANGE)
 # set up extracted files and directories
 ramdisk=/tmp/anykernel/ramdisk;
@@ -25,49 +27,17 @@ ui_print() { echo -e "ui_print $1\nui_print" > $OUTFD; }
 # contains <string> <substring>
 contains() { test "${1#*$2}" != "$1" && return 0 || return 1; }
 
-# find the location of the boot block
+# find boot image partition if not set already
+# borrow from SuperSu
 find_boot() {
-	verify_block() {
-		[ -b "$boot_block" ] || return 1
-		print "Found boot partition at: $boot_block"
-	}
-	# if we already have boot block set then verify and use it
-	verify_block && return
-	# otherwise, time to go hunting!
-	[ -f /etc/recovery.fstab ] && {
-		# recovery fstab v1
-		boot_block=$(awk '$1 == "/boot" {print $3}' /etc/recovery.fstab)
-		[ "$boot_block" ] && verify_block && return
-		# recovery fstab v2
-		boot_block=$(awk '$2 == "/boot" {print $1}' /etc/recovery.fstab)
-		[ "$boot_block" ] && verify_block && return
-		return 1
-	} && return
-	[ -f /fstab.qcom ] && {
-		# qcom fstab
-		boot_block=$(awk '$2 == "/boot" {print $1}' /fstab.qcom)
-		[ "$boot_block" ] && verify_block && return
-		return 1
-	} && return
-	[ -f /proc/emmc ] && {
-		# emmc layout
-		boot_block=$(awk '$4 == "\"boot\"" {print $1}' /proc/emmc)
-		[ "$boot_block" ] && boot_block=/dev/block/$(echo "$boot_block" | cut -f1 -d:) && verify_block && return
-		return 1
-	} && return
-	[ -f /proc/mtd ] && {
-		# mtd layout
-		boot_block=$(awk '$4 == "\"boot\"" {print $1}' /proc/mtd)
-		[ "$boot_block" ] && boot_block=/dev/block/$(echo "$boot_block" | cut -f1 -d:) && verify_block && return
-		return 1
-	} && return
-	[ -f /proc/dumchar_info ] && {
-		# mtk layout
-		boot_block=$(awk '$1 == "/boot" {print $5}' /proc/dumchar_info)
-		[ "$boot_block" ] && verify_block && return
-		return 1
-	} && return
-	abort "Unable to find boot block location!"
+  # expand the detection if we find more, instead of reading from fstab, because unroot
+  # from the SuperSU APK doesn't have the fstab to read from
+  if [ -z "$block" ]; then
+    for PARTITION in kern-a KERN-A android_boot ANDROID_BOOT kernel KERNEL boot BOOT lnx LNX; do
+      block=$(readlink /dev/block/by-name/$PARTITION || readlink /dev/block/platform/*/by-name/$PARTITION || readlink /dev/block/platform/*/*/by-name/$PARTITION || readlink /dev/block/by-name/$PARTITION$SLOT_SUFFIX || readlink /dev/block/platform/*/by-name/$PARTITION$SLOT_SUFFIX || readlink /dev/block/platform/*/*/by-name/$PARTITION$SLOT_SUFFIX)
+      if [ ! -z "$block" ]; then break; fi
+    done
+  fi
 }
 
 # dump boot and extract ramdisk
