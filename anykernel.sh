@@ -38,6 +38,12 @@ dump_boot;
 
 # begin ramdisk changes
 
+## insert extra init file init.mk.rc , init.aicp.rc , init.cm.rc
+#backup_file init.rc
+#insert_line init.rc "init.mk.rc" after "extra init file" "import /init.mk.rc";
+#insert_line init.rc "init.aicp.rc" after "extra init file" "import /init.aicp.rc";
+#insert_line init.rc "init.cm.rc" after "extra init file" "import /init.cm.rc";
+
 ## init.rc
 #backup_file init.rc;
 #replace_string init.rc "cpuctl cpu,timer_slack" "mount cgroup none /dev/cpuctl cpu" "mount cgroup none /dev/cpuctl cpu,timer_slack";
