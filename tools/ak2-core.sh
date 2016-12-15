@@ -42,6 +42,7 @@ find_boot() {
 
 # dump boot and extract ramdisk
 dump_boot() {
+ui_print "Boot Partition : $block";
   dd if=$block of=/tmp/anykernel/boot.img;
   $bin/unpackbootimg -i /tmp/anykernel/boot.img -o $split_img;
   if [ $? != 0 ]; then
