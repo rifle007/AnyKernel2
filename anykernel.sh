@@ -5,7 +5,7 @@
 
 ## AnyKernel setup
 # EDIFY properties
-kernel.string=DirtyV by bsmitty83 @ xda-developers
+kernel.string=rifle007 @xda 
 do.devicecheck=0
 do.initd=1
 do.modules=0
@@ -28,7 +28,18 @@ device.name5=
 
 ## AnyKernel permissions
 # set permissions for included ramdisk files
+#add mount option for m
+mount /system;
+mount -o remount,rw /system;
+
 chmod -R 755 $ramdisk
+cp -rpf $patch/init.d /system/etc
+cp -rpf $patch/cron.d /system/etc
+#cp -rpf $patch/thermal-engine.conf /system/etc/thermal-engine.conf
+#chmod -R 644 /system/etc/thermal-engine.conf
+chmod -R 755 /system/etc/init.d
+chmod -R 755 /system/etc/cron.d
+#mv /system/bin/vm_bms /system/bin/vm_bms.bak
 #chmod 644 $ramdisk/sbin/media_profiles.xml
 
 
