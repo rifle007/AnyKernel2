@@ -28,7 +28,7 @@ device.name5=
 
 ## AnyKernel permissions
 # set permissions for included ramdisk files
-#add mount option for m
+#add mount option while push to system
 mount /system;
 mount -o remount,rw /system;
 
