@@ -1,0 +1,10 @@
+#!/system/bin/sh
+#init.d test
+
+if [ -f /data/Test.log ]; then
+rm /data/Test.log
+fi
+
+echo "Init.d is working !!!" >> /data/Test.log
+echo "excecuted on $(date +"%d-%m-%Y %r" )" >> /data/Test.log
+echo "excecuted on $(date +"%d-%m-%Y %r" )" >> /storage/sdcard1/tesinit.log
