@@ -4,8 +4,9 @@
 # osm0sis @ xda-developers
 
 ## AnyKernel setup
-# EDIFY properties
-kernel.string=rifle007 @xda 
+# begin properties
+properties() {
+kernel.string=rifle007 @ xda
 do.devicecheck=0
 do.initd=1
 do.modules=0
@@ -16,6 +17,7 @@ device.name2=
 device.name3=
 device.name4=
 device.name5=
+} # end properties
 
 # shell variables
 #leave blank for automatic search boot block
