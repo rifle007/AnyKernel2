@@ -172,7 +172,6 @@ write_boot() {
     $bin/flash_erase $block 0 0;
     $bin/nandwrite -p $block /tmp/anykernel/boot-new.img;
   else
-    dd if=/dev/zero of=$block;
     dd if=/tmp/anykernel/boot-new.img of=$block;
   fi;
 }
